@@ -1,0 +1,95 @@
+'''
+The following are Sqooop commands for putting the retail_db MySQL database into HDFS
+in the form of Hive tables.  The retail_db database comes as a default database on the
+Cloudera Virtual Machine.
+'''
+
+//lists the databases in MySQL
+sqoop list-databases \
+	--connect "jdbc:mysql://quickstart.cloudera:3306" \
+	--username retail_dba \
+	--password cloudera
+
+//lists the tables of the retail_db database
+sqoop list-tables \
+	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_db" \
+	--username retail_dba \
+	--password cloudera
+
+//imports all tables from the retail_db database
+sqoop import-all-tables \
+	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_db" \
+	--username retail_dba \
+	--password cloudera \
+	--direct \
+	--hive-import \
+	--hive-overwrite \
+	--create-hive-table \
+	--num-mappers 1 \
+	--hive-database retail_db \
+	--outdir java-files
+
+//imports the departments table into HDFS
+sqoop import \
+	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_db" \
+	--username retail_dba \
+	--password cloudera \
+	--table departments \
+	--num-mappers 1 \
+	--hive-import \
+	--create-hive-table \
+	--hive-overwrite \
+	--compress \
+	--compression-codec
+
+//use for the avro format
+//use the --as-avrodatafile parameter
+//After the data has been imported in Avro format, the avsc schema file is created
+//in the directory in which the sqoop command was executed.  The file must be copied to 
+//HDFS from the local file system.  After that, the following create table command must be
+//executed in the hive interpreter so that hive can access the data that is in avro format
+CREATE EXTERNAL TABLE departments
+ROW FORMAT SERDE 'org.apache.hadoop.hive.serde2.avro.AvroSerDe'
+STORED AS INPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerInputFormat'
+OUTPUTFORMAT 'org.apache.hadoop.hive.ql.io.avro.AvroContainerOutputFormat'
+LOCATION 'hdfs:///user/cloudera/retail'
+TBLPROPERTIES ('avro.schema.url'='hdfs://quickstart.cloudera/user/cloudera/departments.avsc');
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
