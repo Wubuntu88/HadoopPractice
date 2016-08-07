@@ -16,7 +16,7 @@ sqoop list-tables \
 	--username retail_dba \
 	--password cloudera
 
-//imports all tables from the retail_db database
+//imports all tables from the retail_db database in hive
 sqoop import-all-tables \
 	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_db" \
 	--username retail_dba \
@@ -28,6 +28,45 @@ sqoop import-all-tables \
 	--num-mappers 1 \
 	--hive-database retail_db \
 	--outdir java-files
+
+//imports all tables from the retail_db database in hive using Snappy Compression
+sqoop import-all-tables \
+	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_db" \
+	--username retail_dba \
+	--password cloudera \
+	--direct \
+	--hive-import \
+	--hive-overwrite \
+	--create-hive-table \
+	--num-mappers 1 \
+	--hive-database retail_snappy_db \
+	--compress \
+	--compression-codec org.apache.hadoop.io.compress.SnappyCodec \
+	--outdir java-files
+
+//imports all tables as sequence files
+sqoop import \
+	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_db" \
+	--username retail_dba \
+	--password cloudera \
+	--table departments \
+	--num-mappers 1 \
+	--as-sequencefile \
+	--target-dir=/user/cloudera/retail_db_seq
+
+//imports all tables from the retail_db into HDFS flat files
+sqoop import-all-tables \
+	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_db" \
+	--username retail_dba \
+	--password cloudera \
+	--direct \
+	--num-mappers 1 \
+	--warehouse-dir retail_db_flat \
+	--as-textfile \
+	--fields-terminated-by '\t' \
+	--outdir java-files
+
+
 
 //imports the departments table into HDFS
 sqoop import \
@@ -41,6 +80,8 @@ sqoop import \
 	--hive-overwrite \
 	--compress \
 	--compression-codec
+
+
 
 //use for the avro format
 //use the --as-avrodatafile parameter
