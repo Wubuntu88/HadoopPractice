@@ -1,0 +1,17 @@
+using dataframes
+[Row(customer_fname=u'Teresa', customer_lname=u'Gray', order_date=u'2014-03-02 00:00:00', subtotal_sum=3579.8500000000004), 
+Row(customer_fname=u'Victoria', customer_lname=u'Smith', order_date=u'2013-08-16 00:00:00', subtotal_sum=3449.9100000000003), 
+Row(customer_fname=u'Christopher', customer_lname=u'Cooper', order_date=u'2014-03-15 00:00:00', subtotal_sum=2919.6599999999999), 
+Row(customer_fname=u'Mary', customer_lname=u'Anderson', order_date=u'2013-09-26 00:00:00', subtotal_sum=2859.8900000000003), 
+Row(customer_fname=u'Samantha', customer_lname=u'Smith', order_date=u'2014-06-06 00:00:00', subtotal_sum=2839.9099999999999)]
+
+from sql
+[Row(_c0=u'Teresa', _c1=u'Gray', order_date=u'2014-03-02 00:00:00', the_total=3579.8499999999999), 
+Row(_c0=u'Victoria', _c1=u'Smith', order_date=u'2013-08-16 00:00:00', the_total=3449.9099999999999), 
+Row(_c0=u'Christopher', _c1=u'Cooper', order_date=u'2014-03-15 00:00:00', the_total=2919.6599999999999), 
+Row(_c0=u'Mary', _c1=u'Anderson', order_date=u'2013-09-26 00:00:00', the_total=2859.8899999999999), 
+Row(_c0=u'Samantha', _c1=u'Smith', order_date=u'2014-06-06 00:00:00', the_total=2839.9099999999999)]
+
+from rdd
+[(u'Teresa', u'Gray', u'2014-03-02 00:00:00', 3579.8500000000004), (u'Victoria', u'Smith', u'2013-08-16 00:00:00', 3449.9100000000003), (u'Christopher', u'Cooper', u'2014-03-15 00:00:00', 2919.6600000000003), (u'Mary', u'Anderson', u'2013-09-26 00:00:00', 2859.8900000000003), (u'Samantha', u'Smith', u'2014-06-06 00:00:00', 2839.9099999999999)]
+
