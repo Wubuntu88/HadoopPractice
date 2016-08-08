@@ -29,10 +29,10 @@ products_raw = sc.textFile("hdfs://quickstart.cloudera:8020/user/cloudera/retail
 
 price_name_pair = products_raw.map(create_price_name_tuples)
 
-most_expensive_item = price_name_pair.reduce(lambda x, y: get_max_price(x, y))
+most_expensive_item = price_name_pair.reduce(get_max_price)
 
 print "**************************\n{0}".format(str(most_expensive_item))
-
+#Result: (u'SOLE E35 Elliptical', 1999.99)
 
 
 
