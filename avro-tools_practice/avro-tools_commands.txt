@@ -1,0 +1,62 @@
+# lists the commands available
+java -jar ~/avro-tools-1.8.1.jar
+
+# lists the optional parameters for the command 'fromjson'
+java -jar ~/avro-tools-1.8.1.jar fromjson
+
+# note: to do these commands you need a .avsc file (the schema) and a .json file
+# that implements that schema.  Then you are all set.
+
+
+################## FROM JSON TO AVRO ##################
+
+# uses the json file 'tweets1.json' and the schema file 'twitter.avsc' (as a parameter)
+# and creates an avro file 'tweets.avro' by redirecting IO.
+java -jar ~/avro-tools-1.8.1.jar fromjson \
+				--schema-file tweets.avsc \
+				tweets1.json > tweets1.avro
+
+# same thing as the one above, but compresses it with snappy
+java -jar ~/avro-tools-1.8.1.jar fromjson \
+				--codec snappy \
+				--schema-file tweets.avsc \
+				tweets1.json > tweets1.snappy.avro
+
+################## FROM AVRO BACK TO JSON ##################
+
+# takes an avro file and creates a new json file in pretty format
+java -jar ~/avro-tools-1.8.1.jar tojson -pretty tweets1.avro > tweets1_back_to_json.json
+
+# same as above but the avro file has been compressed with snappy
+java -jar ~/avro-tools-1.8.1.jar tojson \
+				--pretty \
+				tweets1.snappy.avro > tweets1_back_to_json_from_snappy.json
+
+################## EXTRACTING SCHEMA FROM AVRO FILE ##################
+# extracts the avro schema from the avro file 'tweets1.avro' and saves it to 
+# a newly created avro schema file 'tweets_schema_from_avro.avsc'
+java -jar ~/avro-tools-1.8.1.jar getschema tweets1.avro > tweets_schema_from_avro.avsc
+
+# does the same as the command above, except the source avro file is compressed with snappy
+java -jar ~/avro-tools-1.8.1.jar getschema tweets1.snappy.avro > tweets_schema_from_snappy_json.avsc
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

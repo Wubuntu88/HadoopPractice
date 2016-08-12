@@ -1,0 +1,19 @@
+{
+	"type" : "record",
+	"name" : "tweet_schema",
+	"namespace" : "com.will.avro",
+	"fields" : [ {
+		"name" : "username",
+		"type" : "string",
+		"doc" : "the username of the user on Twitter"
+	}, {
+		"name" : "tweet",
+		"type" : "string",
+		"doc" : "content of message"
+	}, {
+		"name" : "timestamp",
+		"type" : "long",
+		"doc" : "Unix timestamp"
+	} ],
+	"doc" : "basic schema for tweets"
+}
