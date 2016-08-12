@@ -1,0 +1,12 @@
+# The following commands create a hive database for the movie lends dataset
+# The database is in text format; later I will migrate it to ORC and Parquet
+
+########## CREATE DATABASE ##########
+CREATE DATABASE movielens_text_db;
+
+########## CREATE TABLE STATEMENTS ##########
+CREATE EXTERNAL TABLE movielens_text_db.ratings(user_id int,movie_id int,rating int,timestamp string) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" STORED AS TEXTFILE;
+
+LOAD DATA LOCAL INPATH '/home/cloudera/Desktop/Will/HadoopPractice/movie_lens_practice/ml-1m/ratings.txt' OVERWRITE INTO TABLE movielens_text_db.ratings;
+
+
