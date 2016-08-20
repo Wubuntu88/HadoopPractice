@@ -1,0 +1,16 @@
+import org.apache.spark.SparkContext, org.apache.spark.SparkConf
+
+/**
+This is a simple example of word count.  It is done on the order items dataset, 
+so it doesn't mean anything; it is just practice
+*/
+
+//load data, then make an RDD of words using flatMap
+val words = sc.textFile("retail_db_flat/order_items/part*").flatMap( line => line.split("\t") )
+val words_one = words.map( word => (word, 1) )
+val word_frequencies = words_one.reduceByKey( (x, y) => x + y )
+//sorts the word frequencies so that words with the highest frequency are at the top
+val words_sorted_by_freq = word_frequencies.sortBy(_._2, false)
+
+//takes the top 5 frequent words
+word_frequencies.take(5)
