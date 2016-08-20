@@ -1,12 +1,86 @@
 # The following commands create a hive database for the movie lends dataset
 # The database is in text format; later I will migrate it to ORC and Parquet
+# Note: hive was giving me errors when I formatted the statements on multiples lines.
+# that is why the statements are all one liners.
+
+@@@@@@@@@@ FOR TEXT FILE DATABASE @@@@@@@@@@
 
 ########## CREATE DATABASE ##########
 CREATE DATABASE movielens_text_db;
 
 ########## CREATE TABLE STATEMENTS ##########
+### RATINGS ###
 CREATE EXTERNAL TABLE movielens_text_db.ratings(user_id int,movie_id int,rating int,timestamp string) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" STORED AS TEXTFILE;
 
 LOAD DATA LOCAL INPATH '/home/cloudera/Desktop/Will/HadoopPractice/movie_lens_practice/ml-1m/ratings.txt' OVERWRITE INTO TABLE movielens_text_db.ratings;
+
+### USERS ###
+CREATE EXTERNAL TABLE movielens_text_db.users(user_id int, gender string, age int, occupation int, zipcode string) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" STORED AS TEXTFILE;
+
+LOAD DATA LOCAL INPATH '/home/cloudera/Desktop/Will/HadoopPractice/movie_lens_practice/ml-1m/users.txt' OVERWRITE INTO TABLE movielens_text_db.users;
+
+### MOVIES ###
+CREATE EXTERNAL TABLE movielens_text_db.movies(movie_id int, title string, genres ARRAY<STRING>) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" COLLECTION ITEMS TERMINATED BY "|" STORED AS TEXTFILE;
+
+LOAD DATA LOCAL INPATH '/home/cloudera/Desktop/Will/HadoopPractice/movie_lens_practice/ml-1m/movies.txt' OVERWRITE INTO TABLE movielens_text_db.movies;
+
+/**************************************************/
+/**************************************************/
+/**************************************************/
+
+@@@@@@@@@@ FOR PARQUET FILE DATABASE @@@@@@@@@@
+
+########## CREATE DATABASE ##########
+CREATE DATABASE movielens_parquet_db;
+
+########## CREATE TABLE STATEMENTS ##########
+
+### RATINGS ###
+CREATE EXTERNAL TABLE movielens_parquet_db.ratings(user_id int,movie_id int,rating int,timestamp string) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" STORED AS PARQUET;
+
+INSERT INTO movielens_parquet_db.ratings SELECT * FROM movielens_text_db.ratings;
+
+### USERS ###
+CREATE EXTERNAL TABLE movielens_parquet_db.users(user_id int, gender string, age int, occupation int, zipcode string) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" STORED AS PARQUET;
+
+INSERT INTO movielens_parquet_db.users SELECT * FROM movielens_text_db.users;
+
+### MOVIES ###
+CREATE EXTERNAL TABLE movielens_parquet_db.movies(movie_id int, title string, genres ARRAY<STRING>) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" COLLECTION ITEMS TERMINATED BY "|" STORED AS PARQUET;
+
+INSERT INTO movielens_parquet_db.movies SELECT * FROM movielens_text_db.movies;
+
+/**************************************************/
+/**************************************************/
+/**************************************************/
+
+@@@@@@@@@@ FOR ORC FILE DATABASE @@@@@@@@@@
+
+########## CREATE DATABASE ##########
+CREATE DATABASE movielens_orc_db;
+
+########## CREATE TABLE STATEMENTS ##########
+
+### RATINGS ###
+CREATE EXTERNAL TABLE movielens_orc_db.ratings(user_id int,movie_id int,rating int,timestamp string) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" STORED AS ORC tblproperties("orc.compress" = "SNAPPY");
+
+INSERT INTO movielens_orc_db.ratings SELECT * FROM movielens_text_db.ratings;
+
+### USERS ###
+CREATE EXTERNAL TABLE movielens_orc_db.users(user_id int, gender string, age int, occupation int, zipcode string) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" STORED AS ORC tblproperties("orc.compress" = "SNAPPY");
+
+INSERT INTO movielens_orc_db.users SELECT * FROM movielens_text_db.users;
+
+### MOVIES ###
+CREATE EXTERNAL TABLE movielens_orc_db.movies(movie_id int, title string, genres ARRAY<STRING>) ROW FORMAT DELIMITED FIELDS TERMINATED BY "\t" COLLECTION ITEMS TERMINATED BY "|" STORED AS ORC tblproperties("orc.compress" = "SNAPPY");
+
+INSERT INTO movielens_orc_db.movies SELECT * FROM movielens_text_db.movies;
+
+
+
+
+
+
+
 
 
