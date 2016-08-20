@@ -66,8 +66,44 @@ sqoop import-all-tables \
 	--fields-terminated-by '\t' \
 	--outdir java-files
 
+################## SQOOP EXPORT ##################
+# CATEGORIES
+sqoop export \
+	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_export" \
+	--username retail_dba \
+	--password cloudera \
+	--table categories \
+	--input-fields-terminated-by '\0001' \
+	--export-dir /user/hive/warehouse/retail_db.db/categories \
+	-m 1 \
+	--batch
+
+# CUSTOMERS
+sqoop export \
+	--connect jdbc:mysql://quickstart.cloudera:3306/retail_export \
+	--username retail_dba \
+	--password cloudera \
+	--table customers \
+	--export-dir /user/hive/warehouse/retail_db.db/customers \
+	--input-fields-terminated-by "\0001" \
+	-m 1 \
+	--batch
+
+# DEPARTMENTS EXPORT
+sqoop export \
+	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_export" \
+	--username retail_dba \
+	--password cloudera \
+	--table departments \
+	--input-fields-terminated-by '\0001' \
+	--export-dir /user/hive/warehouse/retail_db.db/departments \
+	-m 1 \
+	--batch
 
 
+
+
+################## MISCELANEOUS ##################
 //imports the departments table into HDFS
 sqoop import \
 	--connect "jdbc:mysql://quickstart.cloudera:3306/retail_db" \
